@@ -11,7 +11,13 @@ public interface CouponDao {
 
 	void customerPurchaseCoupon(Coupon coup, Long custId);
 
-	void removeCoupon(Coupon coup);
+	void fullyRemoveCoupon(Coupon coup);
+
+	void removeCouponComp(Coupon coup);
+
+	void removeCouponCust(Coupon coup);
+
+	void removeCouponCoup(Coupon coup);
 
 	void updateCoupon(Coupon coup);
 

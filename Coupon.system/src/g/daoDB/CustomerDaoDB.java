@@ -17,7 +17,6 @@ import f.dao.CustomerDao;
 public class CustomerDaoDB implements CustomerDao {
 	private ConnectionPool pool = ConnectionPool.getPool();
 
-
 	public CustomerDaoDB() {
 		super();
 	}
@@ -81,10 +80,10 @@ public class CustomerDaoDB implements CustomerDao {
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery();) {
 			while (rs.next()) {
-				cust.setId(rs.getLong("cust_id"));
-				cust.setCustName(rs.getString("name"));
-				cust.setPassword(rs.getString("password"));
-				cust.setCoupons(getCoupons(cust));
+				tempCust.setId(rs.getLong("cust_id"));
+				tempCust.setCustName(rs.getString("name"));
+				tempCust.setPassword(rs.getString("password"));
+				tempCust.setCoupons(getCoupons(cust));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -104,6 +103,25 @@ public class CustomerDaoDB implements CustomerDao {
 		try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(sql);) {
 			while (rs.next()) {
 				Customer other = new Customer(rs.getLong("cust_id"), rs.getString("name"), rs.getString("password"));
+				collection.add(other);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.returnConnection(con);
+		}
+		return collection;
+
+	}
+
+	public Collection<Customer> getAllCustomerWithCoupons() {
+		Collection<Customer> collection = new ArrayList<Customer>();
+		String sql = "SELECT * FROM customer";
+		Connection con = pool.getConnection();
+		try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(sql);) {
+			while (rs.next()) {
+				Customer other = new Customer(rs.getLong("cust_id"), rs.getString("name"), rs.getString("password"));
+				other.setCoupons(getCoupons(other));
 				collection.add(other);
 			}
 		} catch (SQLException e) {

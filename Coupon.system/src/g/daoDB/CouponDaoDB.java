@@ -52,7 +52,7 @@ public class CouponDaoDB implements CouponDao {
 	}
 
 	@Override
-	public void removeCoupon(Coupon coup) {
+	public void fullyRemoveCoupon(Coupon coup) {
 		String sql = String.format("DELETE FROM coupon WHERE coup_id=%d", coup.getId());
 		String sql2 = String.format("DELETE FROM company_coupon WHERE coup_id=%d", coup.getId());
 		String sql3 = String.format("DELETE FROM customer_coupon WHERE coup_id=%d", coup.getId());
@@ -183,6 +183,60 @@ public class CouponDaoDB implements CouponDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void removeCouponComp(Coupon coup) {
+		String sql2 = String.format("DELETE FROM company_coupon WHERE coup_id=%d", coup.getId());
+		Connection con = pool.getConnection();
+		try (PreparedStatement stmt2 = con.prepareStatement(sql2);) {
+			stmt2.executeUpdate();
+			System.out.println("Coupon with id " + coup.getId() + " has been removed");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.returnConnection(con);
+		}
+
+	}
+
+	@Override
+	public void removeCouponCust(Coupon coup) {
+		String sql2 = String.format("DELETE FROM customer_coupon WHERE coup_id=%d", coup.getId());
+		Connection con = pool.getConnection();
+		try (PreparedStatement stmt2 = con.prepareStatement(sql2);) {
+			stmt2.executeUpdate();
+			Collection<Customer> custList = custDb.getAllCustomer();
+			for (Customer customer : custList) {
+				Collection<Coupon> coupList = customer.getCoupons();
+				for (Coupon coup2 : coupList) {
+					if (coup2.getId() == coup.getId()) {
+						coupList.remove(coup2);
+					}
+				}
+			}
+			System.out.println("Coupon with id " + coup.getId() + " has been removed");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.returnConnection(con);
+		}
+
+	}
+
+	@Override
+	public void removeCouponCoup(Coupon coup) {
+		String sql = String.format("DELETE FROM coupon WHERE coup_id=%d", coup.getId());
+		Connection con = pool.getConnection();
+		try (PreparedStatement stmt = con.prepareStatement(sql);) {
+			stmt.executeUpdate();
+			System.out.println("Coupon with id " + coup.getId() + " has been removed");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			pool.returnConnection(con);
+		}
+
 	}
 
 }

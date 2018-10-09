@@ -36,7 +36,7 @@ public class DailyCouponExpirationTask implements Runnable {
 					for (Long long1 : list) {
 						Coupon coup = new Coupon();
 						coup.setId(long1);
-						coupDb.removeCoupon(coup);
+						coupDb.fullyRemoveCoupon(coup);
 					}
 					System.out.println("Finished deleting, going to sleep");
 					Thread.sleep(86400000);

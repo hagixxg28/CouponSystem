@@ -9,17 +9,15 @@ import d.beanShells.Company;
 import d.beanShells.Coupon;
 import d.beanShells.Customer;
 import e.enums.CouponType;
-import j.facade.AdminFacade;
 import j.facade.CompanyFacade;
 import j.facade.CustomerFacade;
-import k.couponSystem.CouponSystem;
 
 public class FullTest {
 	public static void main(String[] args)
 			throws CustomerAlreadyExistsException, CompanyAlreadyExistsException, CouponSystemException {
 		System.out.println("STARTING");
-		CouponSystem sys = CouponSystem.getInstance();
-		AdminFacade admin = new AdminFacade();
+//		CouponSystem sys = CouponSystem.getInstance();
+//		AdminFacade admin = new AdminFacade();
 		CustomerFacade facade = new CustomerFacade();
 		CompanyFacade comp = new CompanyFacade();
 

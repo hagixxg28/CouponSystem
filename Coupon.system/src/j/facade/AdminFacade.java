@@ -38,7 +38,7 @@ public class AdminFacade implements CouponClientFacade {
 		if (compDb.companyExists(comp)) {
 			compDb.removeCompany(comp);
 			for (Coupon coup : compDb.getAllCoupons(comp)) {
-				coupDb.removeCoupon(coup);
+				coupDb.fullyRemoveCoupon(coup);
 			}
 		} else {
 			throw new CompanyDoesNotExistException("This company dosen't exist");

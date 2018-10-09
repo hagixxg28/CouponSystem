@@ -34,7 +34,7 @@ public class DailyDeleteThread implements Runnable {
 				for (Long id : list) {
 					Coupon coup = new Coupon();
 					coup.setId(id);
-					dao.removeCoupon(coup);
+					dao.fullyRemoveCoupon(coup);
 				}
 				Thread.sleep(86400);
 			} catch (SQLException e) {

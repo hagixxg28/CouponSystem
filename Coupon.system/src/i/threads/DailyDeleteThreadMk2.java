@@ -40,7 +40,7 @@ public class DailyDeleteThreadMk2 implements Runnable {
 					for (Long long1 : list) {
 						Coupon coup = new Coupon();
 						coup.setId(long1);
-						dao.removeCoupon(coup);
+						dao.fullyRemoveCoupon(coup);
 
 					}
 				} else {

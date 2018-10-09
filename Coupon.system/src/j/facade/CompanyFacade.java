@@ -49,7 +49,7 @@ public class CompanyFacade implements CouponClientFacade {
 
 	public void removeCoupon(Coupon coup) throws CouponSystemException {
 		if (coupDb.getCoupon(coup) != null) {
-			coupDb.removeCoupon(coup);
+			coupDb.fullyRemoveCoupon(coup);
 			Company comp = db.readCompany(currentComp);
 			comp.getCoupons().remove(coup);
 			Collection<Customer> List = custDb.getAllCustomer();

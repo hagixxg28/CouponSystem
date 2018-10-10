@@ -18,9 +18,9 @@ import g.daoDB.CustomerDaoDB;
 
 public class AdminFacade implements CouponClientFacade {
 
-	private CustomerDaoDB custDb = new CustomerDaoDB();
-	private CompanyDaoDB compDb = new CompanyDaoDB();
-	private CouponDaoDB coupDb = new CouponDaoDB();
+	CustomerDaoDB custDb = new CustomerDaoDB();
+	CompanyDaoDB compDb = new CompanyDaoDB();
+	CouponDaoDB coupDb = new CouponDaoDB();
 
 	public AdminFacade() {
 

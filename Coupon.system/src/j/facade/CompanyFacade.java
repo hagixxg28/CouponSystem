@@ -16,10 +16,10 @@ import g.daoDB.CouponDaoDB;
 import g.daoDB.CustomerDaoDB;
 
 public class CompanyFacade implements CouponClientFacade {
-	private CompanyDaoDB db = new CompanyDaoDB();
-	private Company currentComp = new Company();
-	private CouponDaoDB coupDb = new CouponDaoDB();
-	private CustomerDaoDB custDb = new CustomerDaoDB();
+	CompanyDaoDB db = new CompanyDaoDB();
+	Company currentComp = new Company();
+	CouponDaoDB coupDb = new CouponDaoDB();
+	CustomerDaoDB custDb = new CustomerDaoDB();
 
 	public CompanyFacade() {
 
@@ -37,7 +37,6 @@ public class CompanyFacade implements CouponClientFacade {
 		Company comp = db.readCompany(currentComp);
 		comp.setCoupons(List);
 	}
-
 
 	public void custLogin(Long id, String password) {
 		if (db.login(id, password)) {

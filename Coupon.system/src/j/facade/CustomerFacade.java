@@ -15,10 +15,10 @@ import g.daoDB.CouponDaoDB;
 import g.daoDB.CustomerDaoDB;
 
 public class CustomerFacade implements CouponClientFacade {
-	private Date today = new Date(System.currentTimeMillis());
-	private CustomerDaoDB db = new CustomerDaoDB();
-	private Customer cust = new Customer();
-	private CouponDaoDB coupDb = new CouponDaoDB();
+	Date today = new Date(System.currentTimeMillis());
+	CustomerDaoDB db = new CustomerDaoDB();
+	Customer cust = new Customer();
+	CouponDaoDB coupDb = new CouponDaoDB();
 
 	public CustomerFacade() {
 	}

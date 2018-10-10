@@ -9,9 +9,8 @@ public class ConnectionPool {
 
 	private Stack<Connection> conStack = new Stack<>();
 	private static ConnectionPool instance;
-	public static final int MAX = 10;
-	String driverName = "org.apache.derby.jdbc.ClientDriver";
-	String url = "jdbc:derby://localhost:1527/coupon_db";
+	private static final int MAX = 10;
+	private static String url = "jdbc:derby://localhost:1527/coupon_db";
 
 	private ConnectionPool() {
 		super();
@@ -64,15 +63,26 @@ public class ConnectionPool {
 
 	public synchronized void closeConnections() {
 		System.out.println("ConnectionPool shutting down");
-		for (Connection connection : conStack) {
-			try {
-				connection.close();
-			} catch (SQLException e) {
-				System.err.println("unable to close conection");
-				e.printStackTrace();
+		synchronized (conStack) {
+
+			while (conStack.size() < MAX) {
+				try {
+					conStack.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
+			for (Connection connection : conStack) {
+				try {
+					connection.close();
+				} catch (SQLException e) {
+					System.err.println("unable to close conection");
+					e.printStackTrace();
+				}
+			}
+			conStack.removeAll(conStack);
 		}
-		conStack.removeAll(conStack);
 	}
 
 }

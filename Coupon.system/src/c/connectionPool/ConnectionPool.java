@@ -68,7 +68,7 @@ public class ConnectionPool {
 			try {
 				connection.close();
 			} catch (SQLException e) {
-				System.err.println("unable to close connection");
+				System.err.println("unable to close conection");
 				e.printStackTrace();
 			}
 		}

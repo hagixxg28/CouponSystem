@@ -17,8 +17,6 @@ import f.dao.CompanyDao;
 public class CompanyDaoDB implements CompanyDao {
 	private ConnectionPool pool = ConnectionPool.getPool();
 
-
-
 	public CompanyDaoDB() {
 		super();
 	}

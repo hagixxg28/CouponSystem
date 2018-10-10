@@ -64,59 +64,83 @@ public class CompanyFacade implements CouponClientFacade {
 
 	public void updateCoupon(Coupon coup) throws CouponSystemException {
 		if (coupDb.getCoupon(coup) != null) {
-			Double newPrice = coup.getPrice();
-			Date newDate = coup.getEndDate();
-			Coupon updatedCoup = coupDb.getCoupon(coup);
-			updatedCoup.setPrice(newPrice);
-			updatedCoup.setEndDate(newDate);
-			coupDb.updateCoupon(updatedCoup);
+			if (db.getAllCoupons(currentComp).contains(coup)) {
+				Double newPrice = coup.getPrice();
+				Date newDate = coup.getEndDate();
+				Coupon updatedCoup = coupDb.getCoupon(coup);
+				updatedCoup.setPrice(newPrice);
+				updatedCoup.setEndDate(newDate);
+				coupDb.updateCoupon(updatedCoup);
+			}
 		} else {
 			throw new NoCouponsException("There is no such coupon in the Database");
 		}
 	}
 
-	public Coupon getCoupon(Coupon coup) {
-		return coupDb.getCoupon(coup);
+	public Coupon getCoupon(Coupon coup) throws CouponSystemException {
+		if (coupDb.getCoupon(coup) != null) {
+			return coupDb.getCoupon(coup);
+		} else {
+			throw new NoCouponsException("There is no such coupon in the Database");
+		}
 	}
 
-	public Collection<Coupon> getAllCoupon() {
+	public Collection<Coupon> getAllCoupon() throws CouponSystemException {
 		Company comp = db.readCompany(currentComp);
-		return comp.getCoupons();
+		if (comp.getCoupons() != null) {
+			return comp.getCoupons();
+		} else {
+			throw new NoCouponsException("This company contains no coupons");
+		}
 	}
 
-	public Collection<Coupon> getAllCouponByType(CouponType type) {
+	public Collection<Coupon> getAllCouponByType(CouponType type) throws CouponSystemException {
 		Company comp = db.readCompany(currentComp);
 		Collection<Coupon> List = comp.getCoupons();
-		Collection<Coupon> TypeList = new ArrayList<>();
-		for (Coupon coupon : List) {
-			if (coupon.getType().equals(type)) {
-				TypeList.add(coupon);
+		if (!List.isEmpty()) {
+
+			Collection<Coupon> TypeList = new ArrayList<>();
+			for (Coupon coupon : List) {
+				if (coupon.getType().equals(type)) {
+					TypeList.add(coupon);
+				}
 			}
+			return TypeList;
+		} else {
+			throw new NoCouponsException("This company contains no coupons");
 		}
-		return TypeList;
 	}
 
-	public Collection<Coupon> getAllCouponByPrice(double price) {
+	public Collection<Coupon> getAllCouponByPrice(double price) throws CouponSystemException {
 		Company comp = db.readCompany(currentComp);
 		Collection<Coupon> List = comp.getCoupons();
-		Collection<Coupon> priceList = new ArrayList<>();
-		for (Coupon coupon : List) {
-			if (coupon.getPrice() <= price) {
-				priceList.add(coupon);
+		if (!List.isEmpty()) {
+
+			Collection<Coupon> priceList = new ArrayList<>();
+			for (Coupon coupon : List) {
+				if (coupon.getPrice() <= price) {
+					priceList.add(coupon);
+				}
 			}
+			return priceList;
+		} else {
+			throw new NoCouponsException("There are no coupons in this price range");
 		}
-		return priceList;
 	}
 
-	public Collection<Coupon> getAllCouponByDate(Date date) {
+	public Collection<Coupon> getAllCouponByDate(Date date) throws CouponSystemException {
 		Company comp = db.readCompany(currentComp);
 		Collection<Coupon> List = comp.getCoupons();
-		Collection<Coupon> dateList = new ArrayList<>();
-		for (Coupon coupon : List) {
-			if (coupon.getEndDate().before(date)) {
-				dateList.add(coupon);
+		if (List.isEmpty()) {
+			throw new NoCouponsException("There are no coupons for this compnay");
+		} else {
+			Collection<Coupon> dateList = new ArrayList<>();
+			for (Coupon coupon : List) {
+				if (coupon.getEndDate().before(date)) {
+					dateList.add(coupon);
+				}
 			}
+			return dateList;
 		}
-		return dateList;
 	}
 }

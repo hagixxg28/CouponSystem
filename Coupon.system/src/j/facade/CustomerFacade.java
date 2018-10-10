@@ -7,6 +7,8 @@ import java.util.Date;
 import b.exceptions.CouponAlreadyExistsException;
 import b.exceptions.CouponExpiredException;
 import b.exceptions.CouponSystemException;
+import b.exceptions.InvalidLogging;
+import b.exceptions.NoCouponsException;
 import b.exceptions.OutOfCouponsException;
 import d.beanShells.Coupon;
 import d.beanShells.Customer;
@@ -23,11 +25,11 @@ public class CustomerFacade implements CouponClientFacade {
 	public CustomerFacade() {
 	}
 
-	public void custLogin(Long id, String password) {
+	public void custLogin(Long id, String password) throws CouponSystemException {
 		if (db.login(id, password)) {
 			cust.setId(id);
 		} else {
-			System.out.println("Logging failed");
+			throw new InvalidLogging("Id or password are incorrect, try again");
 		}
 	}
 
@@ -57,31 +59,44 @@ public class CustomerFacade implements CouponClientFacade {
 		db.getCustomer(cust).getCouponHistory().add(coup);
 	}
 
+	// This method is not to be used
 	public Collection<Coupon> getAllPurchasedCoupons() {
 		return db.getCustomer(cust).getCouponHistory();
 	}
 
-	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType type) {
+	public Collection<Coupon> getAllPurchasedCouponsByType(CouponType type) throws CouponSystemException {
 		Collection<Coupon> List = new ArrayList<>();
 		for (Coupon coupon : db.getCustomer(cust).getCoupons()) {
 			if (coupon.getType().equals(type)) {
 				List.add(coupon);
 			}
 		}
-		return List;
+		if (!List.isEmpty()) {
+			return List;
+		} else {
+			throw new NoCouponsException("There are no coupons with that type");
+		}
 	}
 
-	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price) {
+	public Collection<Coupon> getAllPurchasedCouponsByPrice(Double price) throws CouponSystemException {
 		Collection<Coupon> List = new ArrayList<>();
 		for (Coupon coupon : db.getCustomer(cust).getCouponHistory()) {
 			if (coupon.getPrice() <= price) {
 				List.add(coupon);
 			}
 		}
-		return List;
+		if (!List.isEmpty()) {
+			return List;
+		} else {
+			throw new NoCouponsException("There are no coupns with that price range");
+		}
 	}
 
-	public Collection<Coupon> getAllCoupons() {
-		return db.getCoupons(cust);
+	public Collection<Coupon> getAllCoupons() throws CouponSystemException {
+		if (!db.getCoupons(cust).isEmpty()) {
+			return db.getCoupons(cust);
+		} else {
+			throw new NoCouponsException("There are no coupons");
+		}
 	}
 }

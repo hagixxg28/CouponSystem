@@ -64,6 +64,14 @@ public class ConnectionPool {
 
 	public synchronized void closeConnections() {
 		System.out.println("ConnectionPool shutting down");
+		for (Connection connection : conStack) {
+			try {
+				connection.close();
+			} catch (SQLException e) {
+				System.err.println("unable to close connection");
+				e.printStackTrace();
+			}
+		}
 		conStack.removeAll(conStack);
 	}
 

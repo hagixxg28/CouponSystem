@@ -49,7 +49,7 @@ public class CustomerFacade implements CouponClientFacade {
 				throw new CouponAlreadyExistsException("You already own this coupon");
 			}
 		}
-		coupDb.customerPurchaseCoupon(coup, cust.getId());
+		coupDb.customerPurchaseCoupon(coup, cust);
 		coupons.add(coup);
 		cust.setCoupons(coupons);
 		int temp = coup.getAmount();

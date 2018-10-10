@@ -31,7 +31,6 @@ public class ConnectionPool {
 			instance = new ConnectionPool();
 		}
 		return instance;
-
 	}
 
 	public synchronized Connection getConnection() {
@@ -56,7 +55,6 @@ public class ConnectionPool {
 				e.printStackTrace();
 			}
 		}
-
 		conStack.push(Connection);
 		notifyAll();
 	}

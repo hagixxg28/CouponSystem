@@ -32,13 +32,13 @@ public class CompanyFacade implements CouponClientFacade {
 				throw new CouponAlreadyExistsException("A coupon with this title already exists");
 			}
 		}
-		coupDb.createCoupon(coup, currentComp.getId());
+		coupDb.createCoupon(coup, currentComp);
 		List.add(coup);
 		Company comp = db.readCompany(currentComp);
 		comp.setCoupons(List);
 	}
 
-	public void custLogin(Long id, String password) {
+	public void compLogin(Long id, String password) {
 		if (db.login(id, password)) {
 			currentComp.setId(id);
 		} else {

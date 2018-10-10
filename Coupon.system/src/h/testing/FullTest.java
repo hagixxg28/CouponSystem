@@ -16,8 +16,8 @@ public class FullTest {
 	public static void main(String[] args)
 			throws CustomerAlreadyExistsException, CompanyAlreadyExistsException, CouponSystemException {
 		System.out.println("STARTING");
-//		CouponSystem sys = CouponSystem.getInstance();
-//		AdminFacade admin = new AdminFacade();
+		// CouponSystem sys = CouponSystem.getInstance();
+		// AdminFacade admin = new AdminFacade();
 		CustomerFacade facade = new CustomerFacade();
 		CompanyFacade comp = new CompanyFacade();
 
@@ -28,15 +28,15 @@ public class FullTest {
 
 		facade.custLogin(cock.getId(), cock.getPassword());
 		System.out.println("logged to cust");
-		comp.custLogin(compeny.getId(), compeny.getPassword());
+		comp.compLogin(compeny.getId(), compeny.getPassword());
 		System.out.println("logged to comp");
 		System.out.println(comp.getCoupon(coup));
-//		System.out.println(comp.getAllCoupon());
-//		System.out.println(comp.getAllCouponByType(CouponType.TRAVELING));
-//		System.out.println(admin.getAllCustomer());
-//		System.out.println(admin.getAllCompanies());
-//		admin.removeCompany(compeny);
-//		System.out.println(admin.getAllCompanies());
+		// System.out.println(comp.getAllCoupon());
+		// System.out.println(comp.getAllCouponByType(CouponType.TRAVELING));
+		// System.out.println(admin.getAllCustomer());
+		// System.out.println(admin.getAllCompanies());
+		// admin.removeCompany(compeny);
+		// System.out.println(admin.getAllCompanies());
 
 	}
 }

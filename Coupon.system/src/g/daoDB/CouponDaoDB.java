@@ -9,13 +9,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import c.connectionPool.ConnectionPool;
+import d.beanShells.Company;
 import d.beanShells.Coupon;
 import d.beanShells.Customer;
 import e.enums.CouponType;
 import f.dao.CouponDao;
 
 public class CouponDaoDB implements CouponDao {
-	private ConnectionPool pool = ConnectionPool.getPool();
 	private CustomerDaoDB custDb = new CustomerDaoDB();
 
 	public CouponDaoDB() {
@@ -23,7 +23,8 @@ public class CouponDaoDB implements CouponDao {
 	}
 
 	@Override
-	public void createCoupon(Coupon coup, Long compId) {
+	public void createCoupon(Coupon coup, Company comp) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql = "INSERT INTO coupon VALUES (?, ?, ?, ? ,?, ?, ?, ?, ?)";
 		String sql2 = "INSERT INTO company_coupon VALUES(?, ?)";
 		Connection con = pool.getConnection();
@@ -39,7 +40,7 @@ public class CouponDaoDB implements CouponDao {
 			stmt.setDouble(8, coup.getPrice());
 			stmt.setString(9, coup.getImage());
 			stmt.executeUpdate();
-			stmt2.setLong(1, compId);
+			stmt2.setLong(1, comp.getId());
 			stmt2.setLong(2, coup.getId());
 			stmt2.executeUpdate();
 			System.out.println(coup + " has been added");
@@ -53,6 +54,7 @@ public class CouponDaoDB implements CouponDao {
 
 	@Override
 	public void fullyRemoveCoupon(Coupon coup) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql = String.format("DELETE FROM coupon WHERE coup_id=%d", coup.getId());
 		String sql2 = String.format("DELETE FROM company_coupon WHERE coup_id=%d", coup.getId());
 		String sql3 = String.format("DELETE FROM customer_coupon WHERE coup_id=%d", coup.getId());
@@ -84,6 +86,7 @@ public class CouponDaoDB implements CouponDao {
 	@Override
 	public void updateCoupon(Coupon coup) {
 		String sql = "UPDATE coupon SET title=?, start_date=?, end_date=?, amount=?, type=?, message=?, price=?, image=? WHERE coup_id=?";
+		ConnectionPool pool = ConnectionPool.getPool();
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt = con.prepareStatement(sql);) {
 			stmt.setString(1, coup.getTitle());
@@ -106,6 +109,7 @@ public class CouponDaoDB implements CouponDao {
 
 	@Override
 	public Coupon getCoupon(Coupon coup) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		Coupon otherCoup = new Coupon();
 		String sql = String.format("SELECT * FROM coupon WHERE coup_id=%d", coup.getId());
 		Connection con = pool.getConnection();
@@ -133,6 +137,7 @@ public class CouponDaoDB implements CouponDao {
 
 	@Override
 	public Collection<Coupon> getAllCoupons() {
+		ConnectionPool pool = ConnectionPool.getPool();
 		Collection<Coupon> collection = new ArrayList<Coupon>();
 		String sql = "SELECT * FROM coupon";
 		Connection con = pool.getConnection();
@@ -153,6 +158,7 @@ public class CouponDaoDB implements CouponDao {
 
 	@Override
 	public Collection<Coupon> getCouponByType(CouponType type) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		Collection<Coupon> collection = new ArrayList<Coupon>();
 		String sql = "SELECT * FROM coupon WHERE type='" + CouponType.typeToString(type) + "'";
 		Connection con = pool.getConnection();
@@ -172,11 +178,12 @@ public class CouponDaoDB implements CouponDao {
 	}
 
 	@Override
-	public void customerPurchaseCoupon(Coupon coup, Long custId) {
+	public void customerPurchaseCoupon(Coupon coup, Customer cust) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql2 = "INSERT INTO customer_coupon VALUES(?, ?)";
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt2 = con.prepareStatement(sql2);) {
-			stmt2.setLong(1, custId);
+			stmt2.setLong(1, cust.getId());
 			stmt2.setLong(2, coup.getId());
 			stmt2.executeUpdate();
 			System.out.println(coup + " has been purchased");
@@ -187,6 +194,7 @@ public class CouponDaoDB implements CouponDao {
 
 	@Override
 	public void removeCouponComp(Coupon coup) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql2 = String.format("DELETE FROM company_coupon WHERE coup_id=%d", coup.getId());
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt2 = con.prepareStatement(sql2);) {
@@ -202,6 +210,7 @@ public class CouponDaoDB implements CouponDao {
 
 	@Override
 	public void removeCouponCust(Coupon coup) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql2 = String.format("DELETE FROM customer_coupon WHERE coup_id=%d", coup.getId());
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt2 = con.prepareStatement(sql2);) {
@@ -226,6 +235,7 @@ public class CouponDaoDB implements CouponDao {
 
 	@Override
 	public void removeCouponCoup(Coupon coup) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql = String.format("DELETE FROM coupon WHERE coup_id=%d", coup.getId());
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt = con.prepareStatement(sql);) {

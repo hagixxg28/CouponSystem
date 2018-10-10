@@ -15,7 +15,6 @@ import e.enums.CouponType;
 import f.dao.CustomerDao;
 
 public class CustomerDaoDB implements CustomerDao {
-	private ConnectionPool pool = ConnectionPool.getPool();
 
 	public CustomerDaoDB() {
 		super();
@@ -23,6 +22,7 @@ public class CustomerDaoDB implements CustomerDao {
 
 	@Override
 	public void createCustomer(Customer cust) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql = "INSERT INTO customer  (cust_id,name,password) VALUES (?,?,?)";
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt = con.prepareStatement(sql);) {
@@ -41,6 +41,7 @@ public class CustomerDaoDB implements CustomerDao {
 
 	@Override
 	public void removeCustomer(Customer cust) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql = String.format("DELETE FROM customer WHERE cust_id=%d", cust.getId());
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt = con.prepareStatement(sql);) {
@@ -56,6 +57,7 @@ public class CustomerDaoDB implements CustomerDao {
 
 	@Override
 	public void updateCustomer(Customer cust) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql = "UPDATE customer SET name=?, password=? WHERE cust_id=?";
 		Connection con = pool.getConnection();
 		try (PreparedStatement stmt = con.prepareStatement(sql);) {
@@ -75,6 +77,7 @@ public class CustomerDaoDB implements CustomerDao {
 
 	@Override
 	public Customer getCustomer(Customer cust) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		Customer tempCust = new Customer();
 		String sql = String.format("SELECT * FROM customer WHERE cust_id=%d", cust.getId());
 		Connection con = pool.getConnection();
@@ -97,6 +100,7 @@ public class CustomerDaoDB implements CustomerDao {
 
 	@Override
 	public Collection<Customer> getAllCustomer() {
+		ConnectionPool pool = ConnectionPool.getPool();
 		Collection<Customer> collection = new ArrayList<Customer>();
 		String sql = "SELECT * FROM customer";
 		Connection con = pool.getConnection();
@@ -115,6 +119,7 @@ public class CustomerDaoDB implements CustomerDao {
 	}
 
 	public Collection<Customer> getAllCustomerWithCoupons() {
+		ConnectionPool pool = ConnectionPool.getPool();
 		Collection<Customer> collection = new ArrayList<Customer>();
 		String sql = "SELECT * FROM customer";
 		Connection con = pool.getConnection();
@@ -135,6 +140,7 @@ public class CustomerDaoDB implements CustomerDao {
 
 	@Override
 	public Boolean login(Long id, String password) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		String sql = "SELECT password FROM customer WHERE cust_id=" + id;
 		Connection con = pool.getConnection();
 		try (Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery(sql);) {
@@ -157,6 +163,7 @@ public class CustomerDaoDB implements CustomerDao {
 
 	@Override
 	public Collection<Coupon> getCoupons(Customer cust) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		Collection<Coupon> collection = new ArrayList<Coupon>();
 		String sql = "SELECT customer_coupon.coup_id FROM customer_coupon INNER JOIN coupon"
 				+ " ON coupon.coup_id=customer_coupon.coup_id" + " WHERE cust_id=" + cust.getId();
@@ -193,6 +200,7 @@ public class CustomerDaoDB implements CustomerDao {
 	}
 
 	public boolean customerExists(Customer cust) {
+		ConnectionPool pool = ConnectionPool.getPool();
 		ArrayList<Long> list = new ArrayList<>();
 		String sql = "SELECT cust_id FROM customer WHERE cust_id=" + cust.getId();
 		Connection con = pool.getConnection();

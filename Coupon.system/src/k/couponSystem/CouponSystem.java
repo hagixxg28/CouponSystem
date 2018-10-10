@@ -15,8 +15,8 @@ import j.facade.CouponClientFacade;
 import j.facade.CustomerFacade;
 
 public class CouponSystem {
-	private CompanyDaoDB compDb;
-	private CustomerDaoDB custDb;
+	private CompanyDaoDB compDb = new CompanyDaoDB();
+	private CustomerDaoDB custDb = new CustomerDaoDB();
 	private CouponClientFacade client;
 	private static CouponSystem coupSys = null;
 	private DailyCouponExpirationTask task = new DailyCouponExpirationTask();
@@ -24,9 +24,6 @@ public class CouponSystem {
 
 	private CouponSystem() {
 		System.out.println("Creating a new system");
-		compDb = new CompanyDaoDB();
-		custDb = new CustomerDaoDB();
-		System.out.println("Loaded DaoDB");
 		thread.start();
 		System.out.println("Loaded thread");
 	}
@@ -56,7 +53,7 @@ public class CouponSystem {
 			if (compDb.login(id, password)) {
 				CompanyFacade facade = new CompanyFacade();
 				System.out.println("Welcome company");
-				facade.custLogin(id, password);
+				facade.compLogin(id, password);
 				client = facade;
 				return client;
 			} else {

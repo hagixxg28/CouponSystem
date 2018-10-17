@@ -65,7 +65,7 @@ public class ConnectionPool {
 
 			while (conStack.size() < MAX) {
 				try {
-					conStack.wait();
+					wait();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
